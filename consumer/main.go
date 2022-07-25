@@ -36,7 +36,7 @@ func newConsumer(ctx context.Context, lgr logrus.FieldLogger, brokers []string, 
 		ID:     id.String(),
 		ctx:    ctx,
 		reader: reader,
-		logger: lgr,
+		logger: lgr.WithField("consumer-id", id.String()),
 	}
 }
 
@@ -102,6 +102,9 @@ var topic = flag.String("topic", "", "kafka topic")
 func main() {
 
 	flag.Parse()
+
+	//sigchan := make(chan os.Signal, 1)
+	//signal.Notify(sigchan, syscall.SIGINT, syscall.SIGTERM)
 
 	lgr := logrus.New()
 
