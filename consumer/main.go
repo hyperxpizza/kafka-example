@@ -66,7 +66,7 @@ func (c *Consumer) consume() {
 }
 
 func (c *Consumer) printMessage(msg kafka.Message) {
-	c.logger.Infoln("message")
+	c.logger.Infoln("-- new message")
 	c.logger.Infof("--- topic: %s", msg.Topic)
 	c.logger.Infof("--- key: %s", string(msg.Key))
 	c.logger.Infof("--- value: %s", string(msg.Value))
@@ -103,13 +103,14 @@ func main() {
 
 	flag.Parse()
 
+	lgr := logrus.New()
+
 	if err := validateFlags(); err != nil {
+		lgr.Fatal(err)
 		return
 	}
 
-	lgr := logrus.New()
 	ctx := context.Background()
-
 	brks := strings.Split(*brokers, ",")
 
 	consumer := newConsumer(ctx, lgr, brks, *groupId, *topic)
